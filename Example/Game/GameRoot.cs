@@ -81,7 +81,7 @@ namespace GameProject {
 
         protected override void Update(GameTime gameTime) {
             InputHelper.UpdateSetup();
-            TweenHelper.UpdateSetup(gameTime.TotalGameTime.Ticks / TimeSpan.TicksPerMillisecond);
+            TweenHelper.UpdateSetup(gameTime);
 
             if (_quit.Pressed())
                 Exit();

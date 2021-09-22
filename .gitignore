@@ -62,4 +62,5 @@ monodroid*.msi
 *.VC.db
 *.VC.opendb
 
+artifacts/
 apos-docs/

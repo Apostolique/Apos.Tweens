@@ -30,6 +30,10 @@ This library is inspired by [MonoTween](https://github.com/njlr/MonoTween).
   * Elastic
   * Bounce
 
+## Showcase
+
+![Apos.Tweens Showcase](Images/Showcase.gif)
+
 ## Usage samples
 
 ```csharp

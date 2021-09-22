@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 // Based on: https://github.com/nicolausYes/easing-functions
 
 namespace Apos.Tweens {
+    public delegate float Interpolator(float x);
+
     public static class Easing {
         public static float Linear(float x) => x;
 

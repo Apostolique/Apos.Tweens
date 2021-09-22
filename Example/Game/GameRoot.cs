@@ -68,7 +68,7 @@ namespace GameProject {
             };
         }
 
-        private ITween<Vector2> CreateTween(ref float top, float left, float right, long duration, long wait, Func<float, float> interpolator) {
+        private ITween<Vector2> CreateTween(ref float top, float left, float right, long duration, long wait, Interpolator interpolator) {
             float t = top;
             top += 30;
             return

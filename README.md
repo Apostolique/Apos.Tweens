@@ -11,15 +11,42 @@ This library is inspired by [MonoTween](https://github.com/njlr/MonoTween).
 
 ## Build
 
-* Coming soon!
+[![NuGet](https://img.shields.io/nuget/v/Apos.Tweens.svg)](https://www.nuget.org/packages/Apos.Tweens/) [![NuGet](https://img.shields.io/nuget/dt/Apos.Tweens.svg)](https://www.nuget.org/packages/Apos.Tweens/)
 
 ## Features
 
-* Coming soon!
+* Interpolate float values
+* Interpolate Vector2 values
+* [Easing functions](https://easings.net/):
+  * Linear
+  * Sine
+  * Quad
+  * Cube
+  * Quart
+  * Quint
+  * Circ
+  * Expo
+  * Back
+  * Elastic
+  * Bounce
 
 ## Usage samples
 
-* Coming soon!
+```csharp
+var position = new Vector2Tween(new Vector2(50, 50), new Vector2(200, 200), 2000, Easing.SineIn)
+    .Wait(1000)
+    .Offset(new Vector2(-100, 0), 500)
+    .Yoyo()
+    .Loop();
+
+// ...
+
+TweenHelper.UpdateSetup(gameTime);
+
+// ...
+
+shapeBatch.DrawCircle(position.Value, 10f, Color.White, Color.Black, 2f);
+```
 
 ## Other projects you might like
 

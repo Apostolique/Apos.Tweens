@@ -5,6 +5,11 @@ namespace Apos.Tweens {
             StartTime = TweenHelper.TotalMS;
             Duration = duration;
         }
+        public WaitTween(T value, long duration, long startTime) {
+            A = value;
+            StartTime = startTime;
+            Duration = duration;
+        }
 
         public T A { get; set; }
         public T B => A;
@@ -19,7 +24,7 @@ namespace Apos.Tweens {
 
     public static class WaitExtensions {
         public static ITween<T> Wait<T>(this ITween<T> tween, long duration) {
-            return tween.Then(new WaitTween<T>(tween.B, duration));
+            return tween.Then(new WaitTween<T>(tween.B, duration, tween.StartTime));
         }
     }
 }

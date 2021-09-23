@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Xna.Framework;
 
 namespace Apos.Tweens {
@@ -7,6 +6,13 @@ namespace Apos.Tweens {
             A = a;
             B = b;
             StartTime = TweenHelper.TotalMS;
+            Duration = duration;
+            Interpolator = interpolator;
+        }
+        public Vector2Tween(Vector2 a, Vector2 b, long duration, Interpolator interpolator, long startTime) {
+            A = a;
+            B = b;
+            StartTime = startTime;
             Duration = duration;
             Interpolator = interpolator;
         }

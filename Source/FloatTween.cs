@@ -1,11 +1,16 @@
-using System;
-
 namespace Apos.Tweens {
     public class FloatTween : ITween<float> {
         public FloatTween(float a, float b, long duration, Interpolator interpolator) {
             A = a;
             B = b;
             StartTime = TweenHelper.TotalMS;
+            Duration = duration;
+            Interpolator = interpolator;
+        }
+        public FloatTween(float a, float b, long duration, Interpolator interpolator, long startTime) {
+            A = a;
+            B = b;
+            StartTime = startTime;
             Duration = duration;
             Interpolator = interpolator;
         }

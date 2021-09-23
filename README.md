@@ -39,7 +39,7 @@ This library is inspired by [MonoTween](https://github.com/njlr/MonoTween).
 ```csharp
 var position = new Vector2Tween(new Vector2(50, 50), new Vector2(200, 200), 2000, Easing.SineIn)
     .Wait(1000)
-    .Offset(new Vector2(-100, 0), 500)
+    .Offset(new Vector2(-100, 0), 500, Easing.BounceOut)
     .Yoyo()
     .Loop();
 

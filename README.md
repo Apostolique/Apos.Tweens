@@ -17,6 +17,7 @@ This library is inspired by [MonoTween](https://github.com/njlr/MonoTween).
 
 * Interpolate float values
 * Interpolate Vector2 values
+* Interpolate Color values
 * [Easing functions](https://easings.net/):
   * Linear
   * Sine

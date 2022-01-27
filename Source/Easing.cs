@@ -97,11 +97,11 @@ namespace Apos.Tweens {
             }
         }
 
-        public static float BounceIn(float x) => (float)Math.Pow(2f, 6f * (x - 1f)) * (float)Math.Abs((float)Math.Sin(x * MathHelper.Pi * 3.5f));
-        public static float BounceOut(float x) => 1f - (float)Math.Pow(2f, -6f * x) * (float)Math.Abs((float)Math.Cos(x * MathHelper.Pi * 3.5f));
+        public static float BounceIn(float x) => (float)Math.Pow(2f, 6f * (x - 1f)) * Math.Abs((float)Math.Sin(x * MathHelper.Pi * 3.5f));
+        public static float BounceOut(float x) => 1f - (float)Math.Pow(2f, -6f * x) * Math.Abs((float)Math.Cos(x * MathHelper.Pi * 3.5f));
         public static float BounceInOut(float x) =>
             x < 0.5
-                ? 8f * (float)Math.Pow(2f, 8f * (x - 1f)) * (float)Math.Abs((float)Math.Sin(x * MathHelper.Pi * 7f))
-                : 1f - 8f * (float)Math.Pow(2f, -8f * x) * (float)Math.Abs((float)Math.Sin(x * MathHelper.Pi * 7f));
+                ? 8f * (float)Math.Pow(2f, 8f * (x - 1f)) * Math.Abs((float)Math.Sin(x * MathHelper.Pi * 7f))
+                : 1f - 8f * (float)Math.Pow(2f, -8f * x) * Math.Abs((float)Math.Sin(x * MathHelper.Pi * 7f));
     }
 }

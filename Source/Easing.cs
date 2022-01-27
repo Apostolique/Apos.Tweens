@@ -51,23 +51,23 @@ namespace Apos.Tweens {
             }
         }
 
-        public static float CircIn(float x) => 1f - MathF.Sqrt(1f - x);
-        public static float CircOut(float x) => MathF.Sqrt(x);
+        public static float CircIn(float x) => 1f - (float)Math.Sqrt(1f - x);
+        public static float CircOut(float x) => (float)Math.Sqrt(x);
         public static float CircInOut(float x) =>
             x < 0.5f
-                ? (1f - MathF.Sqrt(1f - 2f * x)) * 0.5f
-                : (1f + MathF.Sqrt(2f * x - 1f)) * 0.5f;
+                ? (1f - (float)Math.Sqrt(1f - 2f * x)) * 0.5f
+                : (1f + (float)Math.Sqrt(2f * x - 1f)) * 0.5f;
 
-        public static float SineIn(float x) => 1f + MathF.Sin(1.5707963f * (x - 1f));
-        public static float SineOut(float x) => MathF.Sin(1.5707963f * x);
-        public static float SineInOut(float x) => 0.5f * (1f + MathF.Sin(3.1415926f * (x - 0.5f)));
+        public static float SineIn(float x) => 1f + (float)Math.Sin(1.5707963f * (x - 1f));
+        public static float SineOut(float x) => (float)Math.Sin(1.5707963f * x);
+        public static float SineInOut(float x) => 0.5f * (1f + (float)Math.Sin(3.1415926f * (x - 0.5f)));
 
-        public static float ExpoIn(float x) => (MathF.Pow(2f, 8f * x) - 1f) / 255f;
-        public static float ExpoOut(float x) => 1f - MathF.Pow(2f, -8f * x);
+        public static float ExpoIn(float x) => ((float)Math.Pow(2f, 8f * x) - 1f) / 255f;
+        public static float ExpoOut(float x) => 1f - (float)Math.Pow(2f, -8f * x);
         public static float ExpoInOut(float x) =>
             x < 0.5f
-                ? (MathF.Pow(2f, 16f * x) - 1f) / 510f
-                : 1f - 0.5f * MathF.Pow(2f, -16f * (x - 0.5f));
+                ? ((float)Math.Pow(2f, 16f * x) - 1f) / 510f
+                : 1f - 0.5f * (float)Math.Pow(2f, -16f * (x - 0.5f));
 
         public static float BackIn(float x) => x * x * (2.70158f * x - 1.70158f);
         public static float BackOut(float x) => 1f + (--x) * x * (2.70158f * x + 1.70158f);
@@ -78,30 +78,30 @@ namespace Apos.Tweens {
 
         public static float ElasticIn(float x) {
             float x2 = x * x;
-            return x2 * x2 * MathF.Sin(x * MathHelper.Pi * 4.5f);
+            return x2 * x2 * (float)Math.Sin(x * MathHelper.Pi * 4.5f);
         }
         public static float ElasticOut(float x) {
             float x2 = (x - 1f) * (x - 1f);
-            return 1f - x2 * x2 * MathF.Cos(x * MathHelper.Pi * 4.5f);
+            return 1f - x2 * x2 * (float)Math.Cos(x * MathHelper.Pi * 4.5f);
         }
         public static float ElasticInOut(float x) {
             float x2;
             if (x < 0.45) {
                 x2 = x * x;
-                return 8f * x2 * x2 * MathF.Sin(x * 28.27433466f);
+                return 8f * x2 * x2 * (float)Math.Sin(x * 28.27433466f);
             } else if (x < 0.55) {
-                return 0.5f + 0.75f * MathF.Sin(x * 12.56637096f);
+                return 0.5f + 0.75f * (float)Math.Sin(x * 12.56637096f);
             } else {
                 x2 = (x - 1f) * (x - 1f);
-                return 1f - 8f * x2 * x2 * MathF.Sin(x * 28.27433466f);
+                return 1f - 8f * x2 * x2 * (float)Math.Sin(x * 28.27433466f);
             }
         }
 
-        public static float BounceIn(float x) => MathF.Pow(2f, 6f * (x - 1f)) * MathF.Abs(MathF.Sin(x * MathHelper.Pi * 3.5f));
-        public static float BounceOut(float x) => 1f - MathF.Pow(2f, -6f * x) * MathF.Abs(MathF.Cos(x * MathHelper.Pi * 3.5f));
+        public static float BounceIn(float x) => (float)Math.Pow(2f, 6f * (x - 1f)) * (float)Math.Abs((float)Math.Sin(x * MathHelper.Pi * 3.5f));
+        public static float BounceOut(float x) => 1f - (float)Math.Pow(2f, -6f * x) * (float)Math.Abs((float)Math.Cos(x * MathHelper.Pi * 3.5f));
         public static float BounceInOut(float x) =>
             x < 0.5
-                ? 8f * MathF.Pow(2f, 8f * (x - 1f)) * MathF.Abs(MathF.Sin(x * MathHelper.Pi * 7f))
-                : 1f - 8f * MathF.Pow(2f, -8f * x) * MathF.Abs(MathF.Sin(x * MathHelper.Pi * 7f));
+                ? 8f * (float)Math.Pow(2f, 8f * (x - 1f)) * (float)Math.Abs((float)Math.Sin(x * MathHelper.Pi * 7f))
+                : 1f - 8f * (float)Math.Pow(2f, -8f * x) * (float)Math.Abs((float)Math.Sin(x * MathHelper.Pi * 7f));
     }
 }

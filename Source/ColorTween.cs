@@ -25,7 +25,7 @@ namespace Apos.Tweens {
 
         public Color Value => ValueAt(TweenHelper.TotalMS - StartTime);
         public Color ValueAt(long ms) {
-            if (ms < 0f) return A;
+            if (ms <= 0f) return A;
             else if (ms >= Duration) return B;
 
             return Color.Lerp(A, B, Interpolator(ms / (float)Duration));

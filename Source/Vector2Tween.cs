@@ -25,7 +25,7 @@ namespace Apos.Tweens {
 
         public Vector2 Value => ValueAt(TweenHelper.TotalMS - StartTime);
         public Vector2 ValueAt(long ms) {
-            if (ms < 0f) return A;
+            if (ms <= 0f) return A;
             else if (ms >= Duration) return B;
 
             return A + (B - A) * Interpolator(ms / (float)Duration);

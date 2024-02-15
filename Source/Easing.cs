@@ -31,6 +31,17 @@ namespace Apos.Tweens {
             x = --x * x;
             return 1f - x * x;
         }
+        public static float QuartInOut(float x) {
+            float x2;
+            if (x < 0.5f) {
+                x2 = x * x;
+                return 8f * x2 * x2;
+            } else {
+                x2 = -2f * x + 2f;
+                x2 *= x2;
+                return 1f - x2 * x2 / 2f;
+            }
+        }
 
         public static float QuintIn(float x) {
             float x2 = x * x;

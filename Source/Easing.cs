@@ -1,11 +1,19 @@
 using System;
 using Microsoft.Xna.Framework;
 
-// Based on: https://github.com/nicolausYes/easing-functions
+// Based on: https://github.com/nicolausYes/easing-functions and https://easings.net
 
 namespace Apos.Tweens {
+    /// <summary>
+    /// Shapes the motion of a tween. Takes the progress from 0 to 1 and returns the eased progress,
+    /// which is 0 at 0 and 1 at 1 but can go outside that range in between.
+    /// </summary>
     public delegate float Interpolator(float x);
 
+    /// <summary>
+    /// Easing functions named like the ones on https://easings.net. Elastic and Bounce use simpler curves
+    /// that have the same feel.
+    /// </summary>
     public static class Easing {
         public static float Linear(float x) => x;
 
@@ -62,30 +70,35 @@ namespace Apos.Tweens {
             }
         }
 
-        public static float CircIn(float x) => 1f - (float)Math.Sqrt(1f - x);
-        public static float CircOut(float x) => (float)Math.Sqrt(x);
+        public static float CircIn(float x) => 1f - MathF.Sqrt(MathF.Max(0f, 1f - x * x));
+        public static float CircOut(float x) => MathF.Sqrt(MathF.Max(0f, x * (2f - x)));
         public static float CircInOut(float x) =>
             x < 0.5f
-                ? (1f - (float)Math.Sqrt(1f - 2f * x)) * 0.5f
-                : (1f + (float)Math.Sqrt(2f * x - 1f)) * 0.5f;
+                ? CircIn(2f * x) * 0.5f
+                : 0.5f + CircOut(2f * x - 1f) * 0.5f;
 
         public static float SineIn(float x) => 1f + (float)Math.Sin(1.5707963f * (x - 1f));
         public static float SineOut(float x) => (float)Math.Sin(1.5707963f * x);
         public static float SineInOut(float x) => 0.5f * (1f + (float)Math.Sin(3.1415926f * (x - 0.5f)));
 
-        public static float ExpoIn(float x) => ((float)Math.Pow(2f, 8f * x) - 1f) / 255f;
-        public static float ExpoOut(float x) => 1f - (float)Math.Pow(2f, -8f * x);
+        public static float ExpoIn(float x) => (MathF.Pow(2f, 10f * x) - 1f) / 1023f;
+        public static float ExpoOut(float x) => 1f - ExpoIn(1f - x);
         public static float ExpoInOut(float x) =>
             x < 0.5f
-                ? ((float)Math.Pow(2f, 16f * x) - 1f) / 510f
-                : 1f - 0.5f * (float)Math.Pow(2f, -16f * (x - 0.5f));
+                ? ExpoIn(2f * x) * 0.5f
+                : 1f - ExpoIn(2f - 2f * x) * 0.5f;
 
         public static float BackIn(float x) => x * x * (2.70158f * x - 1.70158f);
         public static float BackOut(float x) => 1f + (--x) * x * (2.70158f * x + 1.70158f);
-        public static float BackInOut(float x) =>
-            x < 0.5f
-                ? x * x * (7f * x - 2.5f) * 2f
-                : 1 + (--x) * x * 2f * (7f * x + 2.5f);
+        public static float BackInOut(float x) {
+            if (x < 0.5f) {
+                x *= 2f;
+                return x * x * (3.5949095f * x - 2.5949095f) * 0.5f;
+            } else {
+                x = 2f * x - 2f;
+                return 1f + x * x * (3.5949095f * x + 2.5949095f) * 0.5f;
+            }
+        }
 
         public static float ElasticIn(float x) {
             float x2 = x * x;
@@ -95,18 +108,10 @@ namespace Apos.Tweens {
             float x2 = (x - 1f) * (x - 1f);
             return 1f - x2 * x2 * (float)Math.Cos(x * MathHelper.Pi * 4.5f);
         }
-        public static float ElasticInOut(float x) {
-            float x2;
-            if (x < 0.45) {
-                x2 = x * x;
-                return 8f * x2 * x2 * (float)Math.Sin(x * 28.27433466f);
-            } else if (x < 0.55) {
-                return 0.5f + 0.75f * (float)Math.Sin(x * 12.56637096f);
-            } else {
-                x2 = (x - 1f) * (x - 1f);
-                return 1f - 8f * x2 * x2 * (float)Math.Sin(x * 28.27433466f);
-            }
-        }
+        public static float ElasticInOut(float x) =>
+            x < 0.5f
+                ? ElasticIn(2f * x) * 0.5f
+                : 0.5f + ElasticOut(2f * x - 1f) * 0.5f;
 
         public static float BounceIn(float x) => (float)Math.Pow(2f, 6f * (x - 1f)) * Math.Abs((float)Math.Sin(x * MathHelper.Pi * 3.5f));
         public static float BounceOut(float x) => 1f - (float)Math.Pow(2f, -6f * x) * Math.Abs((float)Math.Cos(x * MathHelper.Pi * 3.5f));

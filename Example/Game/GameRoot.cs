@@ -27,7 +27,7 @@ namespace GameProject {
 
         protected override void LoadContent() {
             _s = new SpriteBatch(GraphicsDevice);
-            _sb = new ShapeBatch(GraphicsDevice, Content);
+            _sb = new ShapeBatch(GraphicsDevice);
 
             InputHelper.Setup(this);
 
@@ -88,7 +88,7 @@ namespace GameProject {
         }
 
         protected override void Update(GameTime gameTime) {
-            InputHelper.UpdateSetup();
+            InputHelper.UpdateSetup(gameTime);
             TweenHelper.UpdateSetup(gameTime);
 
             if (_quit.Pressed())

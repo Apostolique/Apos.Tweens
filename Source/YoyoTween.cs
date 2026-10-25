@@ -19,7 +19,7 @@ namespace Apos.Tweens {
 
     public static class YoyoExtensions {
         public static ITween<T> Yoyo<T>(this ITween<T> tween) {
-            return new ThenTween<T>(tween, tween.Reverse());
+            return new YoyoTween<T>(tween);
         }
     }
 }

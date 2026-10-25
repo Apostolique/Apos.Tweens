@@ -11,6 +11,8 @@ namespace Apos.Tweens {
 
         public T Value => ValueAt(TweenHelper.TotalMS - StartTime);
         public T ValueAt(long ms) {
+            if (_tween.Duration <= 0) return _tween.ValueAt(ms);
+
             return _tween.ValueAt(ms % _tween.Duration);
         }
 

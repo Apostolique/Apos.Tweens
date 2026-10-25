@@ -117,7 +117,9 @@ A loop that never ends has a `Duration` of `double.PositiveInfinity`. Anything y
 var height = new FloatTween(0f, 1f, 1000, Easing.SineInOut).Yoyo().Speed(2);
 ```
 
-The tween above lasts 1000 milliseconds instead of 2000.
+![A curve that rises and falls in half the time of a gray curve behind it](speed.png)
+
+The tween above lasts 1000 milliseconds instead of 2000. The gray curve is the tween before `Speed`.
 
 ## Delay
 
@@ -126,6 +128,8 @@ The tween above lasts 1000 milliseconds instead of 2000.
 ```csharp
 var height = new FloatTween(0f, 1f, 1000, Easing.SineInOut).Delay(500);
 ```
+
+![A curve that stays at 0 for a third of the time, then rises to 1](delay.png)
 
 ## Slice
 
@@ -142,6 +146,8 @@ It also gives an end to a loop that never ends. This one goes up and down 3 and 
 var height = new FloatTween(0f, 1f, 300, Easing.QuadOut).Yoyo().Loop().Slice(0, 2100);
 ```
 
+![A curve that goes up and down 3 times, then up once more](slice.png)
+
 ## Remap
 
 `Remap` plays a tween on a time of your own. You give it a duration and a function that takes the milliseconds from 0 to that duration and returns when to read the tween. For example, to play a tween backward at half speed:
@@ -150,6 +156,10 @@ var height = new FloatTween(0f, 1f, 300, Easing.QuadOut).Yoyo().Loop().Slice(0, 
 var tween = new FloatTween(0f, 1f, 1000, Easing.QuadIn);
 var slowReverse = tween.Remap(2000, ms => 1000 - ms / 2);
 ```
+
+![A curve that falls from 1 to 0 over the whole time, over a gray curve that rises in half the time](remap.png)
+
+The gray curve is the tween before `Remap`.
 
 `Speed`, `Delay`, `Slice`, `Reverse` and `Yoyo` could all be written with `Remap`.
 
@@ -177,7 +187,7 @@ When the target moves while a tween is playing, you can play a new tween that st
 _position = new Vector2Tween(_position.Value, newTarget, 300, Easing.CubeOut).Play();
 ```
 
-The value doesn't jump, but it stops and starts moving again. `Retarget` keeps the speed it had instead. [Curves](../curves/README.md) shows how to use it.
+The value doesn't jump, but its speed and direction do. `Retarget` keeps them instead. [Curves](../curves/README.md) shows how to use it.
 
 ## Follow up
 

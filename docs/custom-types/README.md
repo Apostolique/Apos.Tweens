@@ -45,7 +45,12 @@ TweenMath<Rectangle>.Lerp = LerpRectangle;
 TweenMath<Rectangle>.Add = (a, b) => new Rectangle(a.X + b.X, a.Y + b.Y, a.Width + b.Width, a.Height + b.Height);
 ```
 
-`Add` is what `Offset` uses.
+`Add` is what `Offset` uses. [Splines](../curves/README.md) and velocities also need `Subtract` and `Scale`:
+
+```csharp
+TweenMath<Rectangle>.Subtract = (a, b) => new Rectangle(a.X - b.X, a.Y - b.Y, a.Width - b.Width, a.Height - b.Height);
+TweenMath<Rectangle>.Scale = (a, s) => new Rectangle((int)(a.X * s), (int)(a.Y * s), (int)(a.Width * s), (int)(a.Height * s));
+```
 
 An angle in radians is a float, but `FloatTween` would spin the long way around when going from 350° to 10°. The trick is to wrap the difference first:
 
@@ -60,13 +65,29 @@ var rotation = new Tween<float>(_rotation, targetRotation, 300, Easing.SineOut, 
 
 A `To` uses the same lerp as the step before it, so the way back also takes the short way around.
 
-The lerp doesn't have to be a straight line either. This one goes along a curve that bends toward a control point:
+## One tween for many values
+
+`Map` turns each value of a tween into another value, which can be of another type. Let's say a power up should grow, spin and fade in together. One tween from 0 to 1 can drive all of it:
 
 ```csharp
-Vector2 control = new Vector2(300, 0);
+var appear = new FloatTween(0f, 1f, 400, Easing.BackOut)
+    .Map(t => new Appearance(
+        Scale: t,
+        Rotation: (1f - t) * MathHelper.Pi,
+        Color: Color.White * MathHelper.Clamp(t, 0f, 1f)));
 
-var arc = new Tween<Vector2>(new Vector2(100, 400), new Vector2(500, 400), 800, Easing.SineInOut,
-    (a, b, t) => Vector2.Lerp(Vector2.Lerp(a, control, t), Vector2.Lerp(control, b, t), t));
+_powerUp = appear.Play();
+```
+
+`Appearance` here is a record of your own. Everything in it stays in sync since it all comes from the same value.
+
+`Zip` plays two tweens at the same time and puts their values together. It lasts as long as the longest one:
+
+```csharp
+var across = new FloatTween(0f, 400f, 1000, Easing.Linear);
+var down = new FloatTween(0f, 300f, 1000, Easing.BounceOut);
+
+var fall = across.Zip(down, (x, y) => new Vector2(x, y));
 ```
 
 ## Implementing ITween
@@ -91,3 +112,7 @@ _offset = new Shake().Play();
 ```
 
 Many players can read the same tween at different times, so `ValueAt` should only depend on the time it's given.
+
+## Follow up
+
+[Curves](../curves/README.md), a guide that shows how to move along curves and change targets smoothly.

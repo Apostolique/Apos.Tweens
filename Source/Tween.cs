@@ -15,7 +15,7 @@ namespace Apos.Tweens {
         /// <param name="duration">The length in milliseconds.</param>
         /// <param name="easing">The shape of the motion, usually one of the functions in <see cref="Easing"/>.</param>
         /// <param name="lerp">How to go between two values. Defaults to <see cref="TweenMath{T}.Lerp"/>.</param>
-        public Tween(T a, T b, double duration, Interpolator easing, Lerp<T> lerp = null)
+        public Tween(T a, T b, double duration, EasingFunction easing, Lerp<T> lerp = null)
             : this(new Step(a, b, easing ?? throw new ArgumentNullException(nameof(easing)), lerp ?? TweenMath<T>.Lerp ?? throw TweenMath<T>.NoLerp(), null), duration) { }
 
         internal Tween(Step step, double duration) {
@@ -38,7 +38,7 @@ namespace Apos.Tweens {
 
         public T ValueAt(double ms) {
             double[] ends = _storage.Ends;
-            int i = Find(ends, ms);
+            int i = StepSearch.Find(ends, _count, ref _hint, ms);
             ref Step step = ref _storage.Steps[i];
 
             double start = i == 0 ? 0 : ends[i - 1];
@@ -52,19 +52,22 @@ namespace Apos.Tweens {
             return step.Lerp(step.From, step.To, step.Easing((float)(ms / duration)));
         }
 
-        internal Tween<T> AppendTo(T target, double duration, Interpolator easing, Lerp<T> lerp) {
+        internal Tween<T> AppendTo(T target, double duration, EasingFunction easing, Lerp<T> lerp) {
             if (easing == null) throw new ArgumentNullException(nameof(easing));
-            lerp ??= _storage.Steps[_count - 1].Lerp ?? throw TweenMath<T>.NoLerp();
+            lerp ??= LastLerp ?? throw TweenMath<T>.NoLerp();
             return Append(new Step(B, target, easing, lerp, null), duration);
         }
         internal Tween<T> AppendWait(double duration) {
             T b = B;
-            return Append(new Step(b, b, null, _storage.Steps[_count - 1].Lerp, null), duration);
+            return Append(new Step(b, b, null, LastLerp, null), duration);
         }
         internal Tween<T> AppendTween(ITween<T> tween) {
             if (tween is Tween<T> other) return AppendAll(other);
-            return Append(Step.Play(tween, _storage.Steps[_count - 1].Lerp), tween.Duration);
+            return Append(Step.Play(tween, LastLerp), tween.Duration);
         }
+        /// <summary>The lerp that a <c>To</c> chained after this tween uses.</summary>
+        internal Lerp<T> LastLerp => _storage.Steps[_count - 1].Lerp;
+
         internal static Tween<T> From(ITween<T> tween) {
             return tween as Tween<T> ?? new Tween<T>(Step.Play(tween, TweenMath<T>.Lerp), tween.Duration);
         }
@@ -112,40 +115,13 @@ namespace Apos.Tweens {
         }
 
         /// <summary>
-        /// Finds the step that plays at <paramref name="ms"/>. Time mostly moves forward, so the last step found
-        /// and the one after it are checked before searching.
-        /// </summary>
-        private int Find(double[] ends, double ms) {
-            int last = _count - 1;
-            int hint = _hint;
-            if (Contains(ends, hint, last, ms)) return hint;
-            if (hint < last && Contains(ends, hint + 1, last, ms)) {
-                _hint = hint + 1;
-                return hint + 1;
-            }
-
-            int low = 0;
-            int high = last;
-            while (low < high) {
-                int mid = low + (high - low) / 2;
-                if (ms <= ends[mid]) high = mid;
-                else low = mid + 1;
-            }
-            _hint = low;
-            return low;
-        }
-        private static bool Contains(double[] ends, int i, int last, double ms) {
-            return (i == 0 || ms > ends[i - 1]) && (i == last || ms <= ends[i]);
-        }
-
-        /// <summary>
         /// Goes from <see cref="From"/> to <see cref="To"/>. Holds <see cref="From"/> when there's no easing.
         /// Plays <see cref="Tween"/> instead when there's one. <see cref="Lerp"/> is also what the next <c>To</c> uses.
         /// </summary>
-        internal readonly struct Step(T from, T to, Interpolator easing, Lerp<T> lerp, ITween<T> tween) {
+        internal readonly struct Step(T from, T to, EasingFunction easing, Lerp<T> lerp, ITween<T> tween) {
             public readonly T From = from;
             public readonly T To = to;
-            public readonly Interpolator Easing = easing;
+            public readonly EasingFunction Easing = easing;
             public readonly Lerp<T> Lerp = lerp;
             public readonly ITween<T> Tween = tween;
 
@@ -171,11 +147,11 @@ namespace Apos.Tweens {
         /// Plays <paramref name="tween"/>, then goes from its end value to <paramref name="target"/>. Without a
         /// <paramref name="lerp"/>, it uses the same one as the step before.
         /// </summary>
-        public static Tween<T> To<T>(this ITween<T> tween, T target, double duration, Interpolator easing, Lerp<T> lerp = null) {
+        public static Tween<T> To<T>(this ITween<T> tween, T target, double duration, EasingFunction easing, Lerp<T> lerp = null) {
             return Tween<T>.From(tween).AppendTo(target, duration, easing, lerp);
         }
         /// <summary>Plays <paramref name="tween"/>, then moves its end value by <paramref name="offset"/> with <see cref="TweenMath{T}.Add"/>.</summary>
-        public static Tween<T> Offset<T>(this ITween<T> tween, T offset, double duration, Interpolator easing) {
+        public static Tween<T> Offset<T>(this ITween<T> tween, T offset, double duration, EasingFunction easing) {
             Func<T, T, T> add = TweenMath<T>.Add ?? throw TweenMath<T>.NoAdd();
             Tween<T> head = Tween<T>.From(tween);
             return head.AppendTo(add(head.B, offset), duration, easing, null);

@@ -76,13 +76,13 @@ namespace GameProject {
             };
         }
 
-        private TweenPlayer<Vector2> CreateTween(ref float top, float left, float right, long duration, long wait, Interpolator interpolator) {
+        private TweenPlayer<Vector2> CreateTween(ref float top, float left, float right, long duration, long wait, EasingFunction easing) {
             float t = top;
             top += 30;
             return
-                new Vector2Tween(new Vector2(left, t), new Vector2(right, t), duration, interpolator)
+                new Vector2Tween(new Vector2(left, t), new Vector2(right, t), duration, easing)
                     .Wait(wait)
-                    .To(new Vector2(left, t), duration, interpolator)
+                    .To(new Vector2(left, t), duration, easing)
                     .Wait(wait)
                     .Loop()
                     .Play();

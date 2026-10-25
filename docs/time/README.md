@@ -86,6 +86,8 @@ If you'd rather move the clock yourself, for example with a fixed time step, you
 _world.Update(16.6667);
 ```
 
+`TweenHelper.UpdateSetup(16.6667)` does the same for the default clock.
+
 You can also set `TotalMS` directly.
 
 ## Changing the clock

@@ -109,6 +109,50 @@ var height = new FloatTween(0f, 1f, 800, Easing.SineInOut)
 
 A loop that never ends has a `Duration` of `double.PositiveInfinity`. Anything you chain after it never plays, so `Loop()` usually goes last.
 
+## Speed
+
+`Speed` plays a tween faster or slower. 2 is twice as fast and 0.5 is half as fast:
+
+```csharp
+var height = new FloatTween(0f, 1f, 1000, Easing.SineInOut).Yoyo().Speed(2);
+```
+
+The tween above lasts 1000 milliseconds instead of 2000.
+
+## Delay
+
+`Delay` holds the start value for some time, then plays the tween:
+
+```csharp
+var height = new FloatTween(0f, 1f, 1000, Easing.SineInOut).Delay(500);
+```
+
+## Slice
+
+`Slice` plays part of a tween, from a start time to an end time in milliseconds:
+
+```csharp
+var bounce = new FloatTween(0f, 1f, 1000, Easing.BounceOut);
+var lastBounces = bounce.Slice(500, 1000);
+```
+
+It also gives an end to a loop that never ends. This one goes up and down 3 and a half times:
+
+```csharp
+var height = new FloatTween(0f, 1f, 300, Easing.QuadOut).Yoyo().Loop().Slice(0, 2100);
+```
+
+## Remap
+
+`Remap` plays a tween on a time of your own. You give it a duration and a function that takes the milliseconds from 0 to that duration and returns when to read the tween. For example, to play a tween backward at half speed:
+
+```csharp
+var tween = new FloatTween(0f, 1f, 1000, Easing.QuadIn);
+var slowReverse = tween.Remap(2000, ms => 1000 - ms / 2);
+```
+
+`Speed`, `Delay`, `Slice`, `Reverse` and `Yoyo` could all be written with `Remap`.
+
 ## Changing a chain
 
 A tween never changes once it's created. Each method returns a new one and leaves the old one as it was, so you can start a few tweens from the same one:
@@ -127,11 +171,13 @@ To change what a player plays, give it a new tween. It keeps its start time:
 _height.Tween = rise.To(0.5f, 300, Easing.QuadIn);
 ```
 
-When the target moves while a tween is playing, it's usually easier to play a new tween that starts from the current value:
+When the target moves while a tween is playing, you can play a new tween that starts from the current value:
 
 ```csharp
 _position = new Vector2Tween(_position.Value, newTarget, 300, Easing.CubeOut).Play();
 ```
+
+The value doesn't jump, but it stops and starts moving again. `Retarget` keeps the speed it had instead. [Curves](../curves/README.md) shows how to use it.
 
 ## Follow up
 

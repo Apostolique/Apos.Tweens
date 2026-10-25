@@ -6,9 +6,9 @@ namespace Apos.Tweens {
         public static void UpdateSetup(GameTime gameTime) {
             Clock.Update(gameTime);
         }
-        /// <summary>Sets the time of <see cref="Clock"/> directly.</summary>
-        public static void UpdateSetup(double totalMS) {
-            Clock.TotalMS = totalMS;
+        /// <summary>Moves <see cref="Clock"/> forward by <paramref name="elapsedMS"/> multiplied by its scale.</summary>
+        public static void UpdateSetup(double elapsedMS) {
+            Clock.Update(elapsedMS);
         }
 
         /// <summary>The clock that tweens use when they aren't given one.</summary>

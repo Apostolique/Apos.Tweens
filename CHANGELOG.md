@@ -16,10 +16,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Lerps for `Vector3`, `Vector4` and `Quaternion` that tweens use without being given one
 - `Offset` for any type with an add
 - `Loop(count)` to play a tween a set number of times, fractions included
+- `BezierTween<T>` and `CurveTo` to move along a curve with one or two control points
+- `SplineTween<T>` and `SplineTo` to go through a list of points, evenly or at given times
+- `HermiteTween<T>` to go between two values with a start and end velocity
+- `Speed`, `Delay`, `Slice` and `Remap` to change how a tween plays over time
+- `Map` and `Zip` to turn values into other values or put two tweens together
+- `VelocityAt` on tweens and `Velocity` on players
+- `Retarget` on players to change the target without losing the velocity
+- `Subtract` and `Scale` in `TweenMath<T>`
 
 ### Changed
 
 - Times and durations are `double` milliseconds instead of `long`
+- `Interpolator` is now `EasingFunction`
+- `TweenHelper.UpdateSetup(double)` moves the clock by the elapsed milliseconds instead of setting its time
 - Tweens don't change once they're created, and chaining leaves the old tween as it was
 - `To`, `Offset`, `Wait` and `Then` return a `Tween<T>`
 - `To` uses the lerp of the step before it

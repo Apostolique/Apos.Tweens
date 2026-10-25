@@ -11,14 +11,14 @@ namespace Apos.Tweens.Tests {
                 .Where(m => m.ReturnType == typeof(float))
                 .Select(m => new object[] { m.Name });
 
-        private static Interpolator Get(string name) {
-            return typeof(Easing).GetMethod(name).CreateDelegate<Interpolator>();
+        private static EasingFunction Get(string name) {
+            return typeof(Easing).GetMethod(name).CreateDelegate<EasingFunction>();
         }
 
         [Theory]
         [MemberData(nameof(All))]
         public void StartsAt0AndEndsAt1(string name) {
-            Interpolator easing = Get(name);
+            EasingFunction easing = Get(name);
 
             Assert.Equal(0f, easing(0f), 4);
             Assert.Equal(1f, easing(1f), 4);
@@ -27,7 +27,7 @@ namespace Apos.Tweens.Tests {
         [Theory]
         [MemberData(nameof(All))]
         public void HasNoJumps(string name) {
-            Interpolator easing = Get(name);
+            EasingFunction easing = Get(name);
 
             const int steps = 10000;
             for (int i = 0; i < steps; i++) {

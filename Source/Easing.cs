@@ -8,7 +8,7 @@ namespace Apos.Tweens {
     /// Shapes the motion of a tween. Takes the progress from 0 to 1 and returns the eased progress,
     /// which is 0 at 0 and 1 at 1 but can go outside that range in between.
     /// </summary>
-    public delegate float Interpolator(float x);
+    public delegate float EasingFunction(float x);
 
     /// <summary>
     /// Easing functions named like the ones on https://easings.net. Elastic and Bounce use simpler curves

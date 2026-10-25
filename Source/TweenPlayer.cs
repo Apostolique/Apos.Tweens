@@ -26,6 +26,8 @@ namespace Apos.Tweens {
 
         /// <summary>The value at the current time of <see cref="Clock"/>.</summary>
         public T Value => Tween.ValueAt(Elapsed);
+        /// <summary>How fast <see cref="Value"/> changes, in units per millisecond. See <see cref="VelocityExtensions.VelocityAt"/>.</summary>
+        public T Velocity => Tween.VelocityAt(Elapsed);
         /// <summary>Milliseconds since the start. Negative before it starts.</summary>
         public double Elapsed => Clock.TotalMS - StartTime;
         /// <summary>True once the tween has played to the end. A tween that loops forever is never done.</summary>
@@ -34,6 +36,17 @@ namespace Apos.Tweens {
         /// <summary>Starts the tween over from the current time on <see cref="Clock"/>.</summary>
         public void Restart() {
             StartTime = Clock.TotalMS;
+        }
+        /// <summary>
+        /// Plays a new tween from now that goes from <see cref="Value"/> to <paramref name="target"/> in
+        /// <paramref name="duration"/> milliseconds. It leaves at the current <see cref="Velocity"/> and slows
+        /// down to a stop, so the motion doesn't kink when the target changes while it plays.
+        /// </summary>
+        public void Retarget(T target, double duration) {
+            T value = Value;
+            T velocity = Velocity;
+            Tween = new HermiteTween<T>(value, velocity, target, TweenMath<T>.Scale(target, 0f), duration);
+            Restart();
         }
     }
 

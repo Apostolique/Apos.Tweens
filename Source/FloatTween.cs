@@ -1,41 +1,19 @@
+using Microsoft.Xna.Framework;
+
 namespace Apos.Tweens {
-    public class FloatTween : ITween<float> {
-        public FloatTween(float a, float b, long duration, Interpolator interpolator) {
-            A = a;
-            B = b;
-            StartTime = TweenHelper.TotalMS;
-            Duration = duration;
-            Interpolator = interpolator;
-        }
-        public FloatTween(float a, float b, long duration, Interpolator interpolator, long startTime) {
-            A = a;
-            B = b;
-            StartTime = startTime;
-            Duration = duration;
-            Interpolator = interpolator;
-        }
-
-        public float A { get; set; }
-        public float B { get; set; }
-        public long StartTime { get; set; }
-        public long Duration { get; set; }
-        public Interpolator Interpolator { get; set; }
-
-        public float Value => ValueAt(TweenHelper.TotalMS - StartTime);
-        public float ValueAt(long ms) {
-            if (ms <= 0f) return A;
-            else if (ms >= Duration) return B;
-
-            return A + (B - A) * Interpolator(ms / (float)Duration);
-        }
+    public class FloatTween : Tween<float> {
+        public FloatTween(float a, float b, double duration, Interpolator easing, TweenClock clock = null) : base(a, b, duration, easing, MathHelper.Lerp, clock) { }
+        public FloatTween(float a, float b, double duration, Interpolator easing, double startTime, TweenClock clock = null) : base(a, b, duration, easing, MathHelper.Lerp, startTime, clock) { }
     }
 
     public static class FloatTweenExtensions {
-        public static ITween<float> To(this ITween<float> tween, float target, long duration, Interpolator interpolator) {
-            return tween.Then(new FloatTween(tween.B, target, duration, interpolator));
+        /// <summary>Plays <paramref name="tween"/>, then goes from its end value to <paramref name="target"/>.</summary>
+        public static ITween<float> To(this ITween<float> tween, float target, double duration, Interpolator easing) {
+            return tween.Then(new FloatTween(tween.B, target, duration, easing));
         }
-        public static ITween<float> Offset(this ITween<float> tween, float offset, long duration, Interpolator interpolator) {
-            return tween.Then(new FloatTween(tween.B, tween.B + offset, duration, interpolator));
+        /// <summary>Plays <paramref name="tween"/>, then moves its end value by <paramref name="offset"/>.</summary>
+        public static ITween<float> Offset(this ITween<float> tween, float offset, double duration, Interpolator easing) {
+            return tween.Then(new FloatTween(tween.B, tween.B + offset, duration, easing));
         }
     }
 }

@@ -1,43 +1,24 @@
+using System;
 using Microsoft.Xna.Framework;
 
 namespace Apos.Tweens {
-    public class ColorTween : ITween<Color> {
-        public ColorTween(Color a, Color b, long duration, Interpolator interpolator) {
-            A = a;
-            B = b;
-            StartTime = TweenHelper.TotalMS;
-            Duration = duration;
-            Interpolator = interpolator;
-        }
-        public ColorTween(Color a, Color b, long duration, Interpolator interpolator, long startTime) {
-            A = a;
-            B = b;
-            StartTime = startTime;
-            Duration = duration;
-            Interpolator = interpolator;
-        }
-
-        public Color A { get; set; }
-        public Color B { get; set; }
-        public long StartTime { get; set; }
-        public long Duration { get; set; }
-        public Interpolator Interpolator { get; set; }
-
-        public Color Value => ValueAt(TweenHelper.TotalMS - StartTime);
-        public Color ValueAt(long ms) {
-            if (ms <= 0f) return A;
-            else if (ms >= Duration) return B;
-
-            return Color.Lerp(A, B, Interpolator(ms / (float)Duration));
-        }
+    public class ColorTween : Tween<Color> {
+        public ColorTween(Color a, Color b, double duration, Interpolator easing, TweenClock clock = null) : base(a, b, duration, easing, Color.Lerp, clock) { }
+        public ColorTween(Color a, Color b, double duration, Interpolator easing, double startTime, TweenClock clock = null) : base(a, b, duration, easing, Color.Lerp, startTime, clock) { }
     }
 
     public static class ColorTweenExtensions {
-        public static ITween<Color> To(this ITween<Color> tween, Color target, long duration, Interpolator interpolator) {
-            return tween.Then(new ColorTween(tween.B, target, duration, interpolator));
+        /// <summary>Plays <paramref name="tween"/>, then goes from its end value to <paramref name="target"/>.</summary>
+        public static ITween<Color> To(this ITween<Color> tween, Color target, double duration, Interpolator easing) {
+            return tween.Then(new ColorTween(tween.B, target, duration, easing));
         }
-        public static ITween<Color> Offset(this ITween<Color> tween, Color offset, long duration, Interpolator interpolator) {
-            return tween.Then(new ColorTween(tween.B, new Color(tween.B.R + offset.R, tween.B.G + offset.G, tween.B.B + offset.B, tween.B.A + offset.A), duration, interpolator));
+        /// <summary>
+        /// Plays <paramref name="tween"/>, then adds <paramref name="offset"/> to its end value. The offset is
+        /// in the 0 to 1 range of <see cref="Color.ToVector4"/> and can be negative. The result is clamped.
+        /// </summary>
+        public static ITween<Color> Offset(this ITween<Color> tween, Vector4 offset, double duration, Interpolator easing) {
+            Vector4 b = (tween.B.ToVector4() + offset) * 255f;
+            return tween.Then(new ColorTween(tween.B, new Color((int)MathF.Round(b.X), (int)MathF.Round(b.Y), (int)MathF.Round(b.Z), (int)MathF.Round(b.W)), duration, easing));
         }
     }
 }

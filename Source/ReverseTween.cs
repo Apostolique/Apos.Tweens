@@ -1,6 +1,7 @@
 using System;
 
 namespace Apos.Tweens {
+    /// <summary>Plays a tween backward, from its end to its start.</summary>
     public class ReverseTween<T> : ITween<T> {
         public ReverseTween(ITween<T> tween) {
             _tween = tween;
@@ -8,11 +9,18 @@ namespace Apos.Tweens {
 
         public T A => _tween.B;
         public T B => _tween.A;
-        public long StartTime => _tween.StartTime;
-        public long Duration => _tween.Duration;
+        public double StartTime {
+            get => _tween.StartTime;
+            set => _tween.StartTime = value;
+        }
+        public double Duration => _tween.Duration;
+        public TweenClock Clock {
+            get => _tween.Clock;
+            set => _tween.Clock = value;
+        }
 
-        public T Value => ValueAt(TweenHelper.TotalMS - StartTime);
-        public T ValueAt(long ms) {
+        public T Value => ValueAt(Clock.TotalMS - StartTime);
+        public T ValueAt(double ms) {
             return _tween.ValueAt(Duration - Math.Clamp(ms, 0, Duration));
         }
 
@@ -20,6 +28,7 @@ namespace Apos.Tweens {
     }
 
     public static class ReverseExtensions {
+        /// <summary>Plays <paramref name="tween"/> backward, from its end to its start.</summary>
         public static ITween<T> Reverse<T>(this ITween<T> tween) {
             return new ReverseTween<T>(tween);
         }

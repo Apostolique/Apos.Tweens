@@ -1,29 +1,31 @@
 # Time
 This guide will show you how to control when tweens play: delays, restarts, pausing and slow motion.
 
-Every tween reads its time from a clock. By default, that's `TweenHelper.Clock`, which `TweenHelper.UpdateSetup(gameTime)` moves forward. Times are in milliseconds.
+Every player reads its time from a clock. By default, that's `TweenHelper.Clock`, which `TweenHelper.UpdateSetup(gameTime)` moves forward. Times are in milliseconds.
 
 ## Start time
 
-A tween starts at the current time on its clock when you create it. You can give it a start time instead, for example to delay it by 200 milliseconds:
+`Play` starts a tween at the current time on its clock. You can give it a start time instead, for example to delay it by 200 milliseconds:
 
 ```csharp
-var fade = new FloatTween(0f, 1f, 500, Easing.QuadOut, TweenHelper.TotalMS + 200);
+var fade = new FloatTween(0f, 1f, 500, Easing.QuadOut).Play(TweenHelper.TotalMS + 200);
 ```
 
-This also works to stagger a few tweens:
+This also works to stagger a few tweens. Since a tween doesn't know when it starts, they can all share the same one:
 
 ```csharp
+var slide = new FloatTween(-200f, 100f, 400, Easing.CubeOut);
+
 for (int i = 0; i < _items.Length; i++) {
-    _items[i] = new Vector2Tween(new Vector2(-200, 100 + i * 50), new Vector2(100, 100 + i * 50), 400, Easing.CubeOut, TweenHelper.TotalMS + i * 80);
+    _items[i] = slide.Play(TweenHelper.TotalMS + i * 80);
 }
 ```
 
-`StartTime` can also be changed after the tween is created, even on a chain.
+A player's `StartTime` can also be changed after it's created.
 
 ## Restart
 
-`Restart` starts a tween over from the current time. For example, to play a hop each time the player jumps:
+`Restart` starts a player over from the current time. For example, to play a hop each time the character jumps:
 
 ```csharp
 if (jumped) {
@@ -33,10 +35,10 @@ if (jumped) {
 
 ## Is it done?
 
-`IsDone()` tells you when a tween has played to the end, and `Elapsed()` tells you how long it's been playing:
+`IsDone` tells you when a player has played its tween to the end, and `Elapsed` tells you how long it's been playing:
 
 ```csharp
-if (_fadeOut.IsDone()) {
+if (_fadeOut.IsDone) {
     _screen = new MainMenu();
 }
 ```
@@ -62,10 +64,10 @@ protected override void Update(GameTime gameTime) {
 }
 ```
 
-Then pass it to the tweens that belong to the world:
+Then play the world's tweens on it:
 
 ```csharp
-var position = new Vector2Tween(new Vector2(100, 100), new Vector2(500, 100), 1000, Easing.SineInOut, _world);
+var position = new Vector2Tween(new Vector2(100, 100), new Vector2(500, 100), 1000, Easing.SineInOut).Play(_world);
 ```
 
 A clock's `Scale` is how fast time goes by on it. 1 is normal speed, 0.5 is half speed and 0 is paused:
@@ -74,7 +76,7 @@ A clock's `Scale` is how fast time goes by on it. 1 is normal speed, 0.5 is half
 _world.Scale = _isPaused ? 0f : 1f;
 ```
 
-The menu's tweens use `TweenHelper.Clock` so they keep playing.
+The menu's tweens play on `TweenHelper.Clock` so they keep going.
 
 A clock's first `Update` only remembers the game time, so a new clock starts at 0 no matter when you create it. After that, each `Update` moves it by the time that went by since the last one, so calling it twice in the same frame doesn't count the time twice.
 
@@ -88,7 +90,7 @@ You can also set `TotalMS` directly.
 
 ## Changing the clock
 
-Each tween's `Clock` can be changed. The start time doesn't change with it, and a start time from one clock doesn't mean much on another, so restart the tween after:
+Each player's `Clock` can be changed. The start time doesn't change with it, and a start time from one clock doesn't mean much on another, so restart the player after:
 
 ```csharp
 _position.Clock = _world;

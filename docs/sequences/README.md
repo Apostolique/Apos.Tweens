@@ -1,7 +1,7 @@
 # Sequences
 This guide will show you how to chain tweens to make longer animations.
 
-Every tween can be followed by another one. The methods below each return a new tween that contains the old one, so you can keep chaining:
+Every tween can be followed by another one. The methods below each return a new tween, so you can keep chaining:
 
 ```csharp
 var position = new Vector2Tween(new Vector2(50, 50), new Vector2(200, 200), 2000, Easing.SineIn)
@@ -11,7 +11,11 @@ var position = new Vector2Tween(new Vector2(50, 50), new Vector2(200, 200), 2000
     .Loop();
 ```
 
-The whole chain is a single tween. You read its `Value` like any other and it starts when the first tween in the chain starts.
+The whole chain is a single tween. You play it like any other:
+
+```csharp
+_position = position.Play();
+```
 
 In the images below, time goes from left to right. The bottom line is 0 and the top line is 1.
 
@@ -61,7 +65,7 @@ var height = new FloatTween(0f, 1f, 1000, Easing.SineInOut)
     .Then(new FloatTween(1f, 0.3f, 1000, Easing.BounceOut));
 ```
 
-The second tween starts when the first one ends, whatever its own start time is. It also doesn't need to start where the first one ended. If it doesn't, the value jumps from one to the other.
+The second tween starts when the first one ends. It doesn't need to start where the first one ended. If it doesn't, the value jumps from one to the other.
 
 ## Reverse
 
@@ -93,7 +97,7 @@ var height = new FloatTween(0f, 1f, 600, Easing.QuadOut).Yoyo().Loop();
 
 ![A curve that keeps going up and down](loop-forever.png)
 
-You can also give it the number of times to play. After the last time, it stays on the end value:
+You can also give it the number of times to play. After the last time, it stays on the end value. A count like `2.5` stops halfway through the third time:
 
 ```csharp
 var height = new FloatTween(0f, 1f, 800, Easing.SineInOut)
@@ -107,22 +111,26 @@ A loop that never ends has a `Duration` of `double.PositiveInfinity`. Anything y
 
 ## Changing a chain
 
-Each method returns an `ITween<T>`, which doesn't let you change the start or end values. If you want to change them later, keep the tween you created yourself:
+A tween never changes once it's created. Each method returns a new one and leaves the old one as it was, so you can start a few tweens from the same one:
 
 ```csharp
-_fade = new FloatTween(0f, 1f, 300, Easing.QuadOut);
-_blink = _fade.Wait(500).To(0f, 300, Easing.QuadIn);
-
-// Later:
-_fade.B = 0.5f;
+var rise = new FloatTween(0f, 1f, 300, Easing.QuadOut).Wait(500);
+var fall = rise.To(0f, 300, Easing.QuadIn);
+var drop = rise.To(-1f, 600, Easing.BounceOut);
 ```
 
-`To`, `Wait` and `Offset` start wherever the tween before them ends, even after a change. In the example above, `_blink` now fades in to 0.5, waits on 0.5 and fades out from 0.5. An `Offset` moves along with it too, since it's relative to where it starts.
+`rise` is still 800 milliseconds long and ends on 1. Chaining onto the newest tween only adds a step at the end, so chains with thousands of steps are quick to build. Chaining onto an older one, like `fall` and `drop` do, copies the steps before it.
 
-When the target moves while a tween is playing, it's usually easier to create a new tween that starts from the current value:
+To change what a player plays, give it a new tween. It keeps its start time:
 
 ```csharp
-_position = new Vector2Tween(_position.Value, newTarget, 300, Easing.CubeOut);
+_height.Tween = rise.To(0.5f, 300, Easing.QuadIn);
+```
+
+When the target moves while a tween is playing, it's usually easier to play a new tween that starts from the current value:
+
+```csharp
+_position = new Vector2Tween(_position.Value, newTarget, 300, Easing.CubeOut).Play();
 ```
 
 ## Follow up

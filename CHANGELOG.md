@@ -8,27 +8,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
-- `Tween<T>` to tween any type with a lerp function, and a `To` overload that takes the lerp
+- `Tween<T>` to tween any type with a lerp function
+- `TweenPlayer<T>` and `Play` to play a tween on a clock, with `Restart`, `Elapsed` and `IsDone`
 - `TweenClock`, a clock that can be paused and slowed down with `Scale`
-- A clock parameter on every tween constructor
-- `TweenHelper.Clock`, the clock tweens use by default
-- `Loop(count)` to play a tween a set number of times
-- `Restart`, `Elapsed` and `IsDone`
-- `StartTime` and `Clock` can be set on chains
+- `TweenHelper.Clock`, the clock players use by default
+- `TweenMath<T>` to set the lerp and add of a type once
+- Lerps for `Vector3`, `Vector4` and `Quaternion` that tweens use without being given one
+- `Offset` for any type with an add
+- `Loop(count)` to play a tween a set number of times, fractions included
 
 ### Changed
 
 - Times and durations are `double` milliseconds instead of `long`
-- `ITween<T>` has a `Clock` and a setter on `StartTime`
-- `FloatTween`, `Vector2Tween` and `ColorTween` extend `Tween<T>`
+- Tweens don't change once they're created, and chaining leaves the old tween as it was
+- `To`, `Offset`, `Wait` and `Then` return a `Tween<T>`
+- `To` uses the lerp of the step before it
+- `FloatTween`, `Vector2Tween`, `ColorTween` and `WaitTween` extend `Tween<T>`
 - `Loop()` lasts forever
-- `To`, `Offset` and `Wait` follow changes to the tween before them
-- Long chains are faster to read
+- Long chains are faster to build and read
 - `TweenHelper.UpdateSetup(GameTime)` moves the clock by the game time since the last call
 - `Offset` on a `ColorTween` takes a `Vector4` that can be negative
 - Circ easings follow a circle
 - Expo easings are a bit steeper
 - `BackInOut` and `ElasticInOut` have new shapes
+
+### Removed
+
+- Start times on tweens and the constructors that take one
+- `Value`, `StartTime`, `A` and `B` on `ITween<T>`
+- Setters on `A`, `B` and `Duration`
+- `Interpolator` on `FloatTween`, `Vector2Tween` and `ColorTween`
+- `ThenTween<T>`
 
 ### Fixed
 

@@ -37,24 +37,24 @@ protected override void Update(GameTime gameTime) {
 
 ## Your first tween
 
-A tween goes from one value to another over some time. Create it once, for example in `LoadContent`:
+A tween goes from one value to another over some time. Create it once and play it, for example in `LoadContent`:
 
 ```csharp
 protected override void LoadContent() {
     _s = new SpriteBatch(GraphicsDevice);
     _texture = Content.Load<Texture2D>("ship");
 
-    _position = new Vector2Tween(new Vector2(100, 100), new Vector2(500, 100), 1000, Easing.SineInOut);
+    _position = new Vector2Tween(new Vector2(100, 100), new Vector2(500, 100), 1000, Easing.SineInOut).Play();
 }
 
 SpriteBatch _s;
 Texture2D _texture;
-ITween<Vector2> _position;
+TweenPlayer<Vector2> _position;
 ```
 
 The arguments are the start value, the end value, the duration in milliseconds, and an easing function that shapes the motion. [Easing](../easing/README.md) shows all of them.
 
-Then read the tween's `Value` whenever you need it:
+`Play` starts the tween now and returns a `TweenPlayer`, which remembers when it started. Read the player's `Value` whenever you need it:
 
 ```csharp
 protected override void Draw(GameTime gameTime) {
@@ -68,18 +68,27 @@ protected override void Draw(GameTime gameTime) {
 }
 ```
 
-The tween starts as soon as it's created. The ship moves from (100, 100) to (500, 100) in 1 second, speeding up and then slowing down. Before the tween starts, `Value` is the start value. After it ends, `Value` stays on the end value.
+The ship moves from (100, 100) to (500, 100) in 1 second, speeding up and then slowing down. Before the tween starts, `Value` is the start value. After it ends, `Value` stays on the end value.
 
-There's a tween for `float`, `Vector2` and `Color`: `FloatTween`, `Vector2Tween` and `ColorTween`. [Custom types](../custom-types/README.md) shows how to tween anything else.
+There's a tween for `float`, `Vector2` and `Color`: `FloatTween`, `Vector2Tween` and `ColorTween`. `Tween<T>` also works with `Vector3`, `Vector4` and `Quaternion`. [Custom types](../custom-types/README.md) shows how to tween anything else.
 
 ## How it works
 
-A tween doesn't keep track of its progress. `Value` is computed each time you read it, from the current time, the tween's start time and its duration. The only thing that needs to be updated each frame is the time, which is what `TweenHelper.UpdateSetup` does.
+A tween only describes the motion. It never changes once it's created and doesn't know what time it is. The player is what knows when the tween started. `Value` is computed each time you read it, from the current time and the player's start time. The only thing that needs to be updated each frame is the time, which is what `TweenHelper.UpdateSetup` does.
 
-This means that you can keep as many tweens around as you want and they cost nothing until you read them. You can also ask for the value at any point, in milliseconds since the start:
+This means that you can keep as many players around as you want and they cost nothing until you read them. Many players can also share the same tween, for example a bounce that every coin plays when it gets picked up:
 
 ```csharp
-Vector2 halfway = _position.ValueAt(500);
+ITween<float> bounce = new FloatTween(0f, -20f, 150, Easing.QuadOut).To(0f, 150, Easing.QuadIn);
+
+// Each time a coin gets picked up:
+coin.Bounce = bounce.Play();
+```
+
+You can also ask a tween for its value at any point, in milliseconds since the start:
+
+```csharp
+float top = bounce.ValueAt(150);
 ```
 
 ## Follow up

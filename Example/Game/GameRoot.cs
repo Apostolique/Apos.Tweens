@@ -38,7 +38,7 @@ namespace GameProject {
             long duration = 2000;
             long wait = 500;
 
-            _tweens = new ITween<Vector2>[] {
+            _tweens = new TweenPlayer<Vector2>[] {
                 CreateTween(ref top, left, right, duration, wait, Easing.Linear),
 
                 CreateTween(ref top, left, right, duration, wait, Easing.CircIn),
@@ -76,7 +76,7 @@ namespace GameProject {
             };
         }
 
-        private ITween<Vector2> CreateTween(ref float top, float left, float right, long duration, long wait, Interpolator interpolator) {
+        private TweenPlayer<Vector2> CreateTween(ref float top, float left, float right, long duration, long wait, Interpolator interpolator) {
             float t = top;
             top += 30;
             return
@@ -84,7 +84,8 @@ namespace GameProject {
                     .Wait(wait)
                     .To(new Vector2(left, t), duration, interpolator)
                     .Wait(wait)
-                    .Loop();
+                    .Loop()
+                    .Play();
         }
 
         protected override void Update(GameTime gameTime) {
@@ -122,6 +123,6 @@ namespace GameProject {
                 new GamePadCondition(GamePadButton.Back, 0)
             );
 
-        ITween<Vector2>[] _tweens;
+        TweenPlayer<Vector2>[] _tweens;
     }
 }

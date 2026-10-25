@@ -7,21 +7,11 @@ namespace Apos.Tweens {
             _tween = tween;
         }
 
-        public T A => _tween.B;
-        public T B => _tween.A;
-        public double StartTime {
-            get => _tween.StartTime;
-            set => _tween.StartTime = value;
-        }
         public double Duration => _tween.Duration;
-        public TweenClock Clock {
-            get => _tween.Clock;
-            set => _tween.Clock = value;
-        }
 
-        public T Value => ValueAt(Clock.TotalMS - StartTime);
         public T ValueAt(double ms) {
-            return _tween.ValueAt(Duration - Math.Clamp(ms, 0, Duration));
+            double duration = _tween.Duration;
+            return _tween.ValueAt(duration - Math.Clamp(ms, 0, duration));
         }
 
         protected ITween<T> _tween;

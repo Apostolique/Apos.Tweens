@@ -52,14 +52,14 @@ namespace Apos.Tweens.Tests {
         [Fact]
         public void AScaleOf0Pauses() {
             var clock = new TweenClock();
-            var tween = new FloatTween(0f, 100f, 1000, Easing.Linear, clock);
+            var player = new FloatTween(0f, 100f, 1000, Easing.Linear).Play(clock);
 
             clock.Update(At(0));
             clock.Update(At(300));
             clock.Scale = 0f;
             clock.Update(At(5000));
 
-            Assert.Equal(30f, tween.Value, 4);
+            Assert.Equal(30f, player.Value, 4);
         }
 
         [Fact]

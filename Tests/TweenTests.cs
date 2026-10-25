@@ -74,6 +74,19 @@ namespace Apos.Tweens.Tests {
         }
 
         [Fact]
+        public void LongChainsPlayEachStepInOrder() {
+            ITween<float> tween = Line(0f, 1f, 100);
+            for (int i = 2; i <= 50; i++) {
+                tween = tween.To(i, 100, Easing.Linear);
+            }
+
+            Assert.Equal(5000, tween.Duration);
+            Assert.Equal(0.5f, tween.ValueAt(50));
+            Assert.Equal(23.5f, tween.ValueAt(2350));
+            Assert.Equal(50f, tween.ValueAt(6000));
+        }
+
+        [Fact]
         public void LoopRunsForever() {
             var tween = Line().Loop();
 

@@ -1,33 +1,46 @@
 namespace Apos.Tweens {
-    /// <summary>Plays one tween, then another.</summary>
+    /// <summary>Plays tweens one after the other.</summary>
     public class ThenTween<T> : ITween<T> {
+        /// <summary>Plays <paramref name="tween1"/>, then <paramref name="tween2"/>.</summary>
         public ThenTween(ITween<T> tween1, ITween<T> tween2) {
-            _tween1 = tween1;
-            _tween2 = tween2;
+            ITween<T>[] first = tween1 is ThenTween<T> then1 ? then1._tweens : [tween1];
+            ITween<T>[] second = tween2 is ThenTween<T> then2 ? then2._tweens : [tween2];
+            _tweens = [.. first, .. second];
         }
 
-        public T A => _tween1.A;
-        public T B => _tween2.B;
+        public T A => _tweens[0].A;
+        public T B => _tweens[^1].B;
         public double StartTime {
-            get => _tween1.StartTime;
-            set => _tween1.StartTime = value;
+            get => _tweens[0].StartTime;
+            set => _tweens[0].StartTime = value;
         }
-        public double Duration => _tween1.Duration + _tween2.Duration;
+        public double Duration {
+            get {
+                double duration = 0;
+                foreach (ITween<T> tween in _tweens) {
+                    duration += tween.Duration;
+                }
+                return duration;
+            }
+        }
         public TweenClock Clock {
-            get => _tween1.Clock;
-            set => _tween1.Clock = value;
+            get => _tweens[0].Clock;
+            set => _tweens[0].Clock = value;
         }
 
         public T Value => ValueAt(Clock.TotalMS - StartTime);
         public T ValueAt(double ms) {
-            double duration1 = _tween1.Duration;
-            if (ms <= duration1) return _tween1.ValueAt(ms);
+            int last = _tweens.Length - 1;
+            for (int i = 0; i < last; i++) {
+                double duration = _tweens[i].Duration;
+                if (ms <= duration) return _tweens[i].ValueAt(ms);
+                ms -= duration;
+            }
 
-            return _tween2.ValueAt(ms - duration1);
+            return _tweens[last].ValueAt(ms);
         }
 
-        protected ITween<T> _tween1;
-        protected ITween<T> _tween2;
+        private readonly ITween<T>[] _tweens;
     }
 
     public static class ThenExtensions {

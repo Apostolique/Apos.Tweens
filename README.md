@@ -1,41 +1,44 @@
 # Apos.Tweens
 Tweening library for MonoGame.
 
-[![Discord](https://img.shields.io/discord/355231098122272778.svg)](https://discord.gg/MonoGame)
+[![Discord](https://img.shields.io/discord/355231098122272778.svg)](https://discord.gg/MonoGame) [![NuGet](https://img.shields.io/nuget/v/Apos.Tweens.svg)](https://www.nuget.org/packages/Apos.Tweens/) [![NuGet](https://img.shields.io/nuget/dt/Apos.Tweens.svg)](https://www.nuget.org/packages/Apos.Tweens/)
+
+## Description
+
+This library moves values from one point to another over time. A tween doesn't keep track of its progress, its value is computed from the time on its clock whenever you read it. Tweens chain into longer animations and cost nothing while they sit around.
 
 This library is inspired by [MonoTween](https://github.com/njlr/MonoTween).
 
+![Apos.Tweens Showcase](Images/Showcase.gif)
+
 ## Documentation
 
-* Coming soon!
-
-## Build
-
-[![NuGet](https://img.shields.io/nuget/v/Apos.Tweens.svg)](https://www.nuget.org/packages/Apos.Tweens/) [![NuGet](https://img.shields.io/nuget/dt/Apos.Tweens.svg)](https://www.nuget.org/packages/Apos.Tweens/)
+* [Getting started](https://apostolique.github.io/Apos.Tweens/getting-started/)
+* [Sequences](https://apostolique.github.io/Apos.Tweens/sequences/)
+* [Easing](https://apostolique.github.io/Apos.Tweens/easing/)
+* [Time](https://apostolique.github.io/Apos.Tweens/time/)
+* [Custom types](https://apostolique.github.io/Apos.Tweens/custom-types/)
 
 ## Features
 
-* Interpolate float values
-* Interpolate Vector2 values
-* Interpolate Color values
-* [Easing functions](https://easings.net/):
-  * Linear
-  * Sine
-  * Quad
-  * Cube
-  * Quart
-  * Quint
-  * Circ
-  * Expo
-  * Back
-  * Elastic
-  * Bounce
+* Tweens for `float`, `Vector2` and `Color`, and `Tween<T>` for any type with a lerp function
+* Chaining with `To`, `Offset`, `Wait`, `Then`, `Reverse`, `Yoyo` and `Loop`
+* [Easing functions](https://easings.net/): Linear, Sine, Quad, Cube, Quart, Quint, Expo, Circ, Back, Elastic, Bounce
+* Clocks that can be paused and slowed down on their own, for a game world that freezes while its menus keep moving
+* `ValueAt` to get the value at any point in time
+* Works with MonoGame and [KNI](https://github.com/kniengine/kni)
 
-## Showcase
+## Getting started
 
-![Apos.Tweens Showcase](Images/Showcase.gif)
+Install with:
 
-## Usage samples
+```
+dotnet add package Apos.Tweens
+```
+
+For KNI, use `Apos.Tweens.KNI` instead.
+
+Create a tween, give the game time to the library at the start of each update, then read the tween's `Value`:
 
 ```csharp
 var position = new Vector2Tween(new Vector2(50, 50), new Vector2(200, 200), 2000, Easing.SineIn)
@@ -44,14 +47,14 @@ var position = new Vector2Tween(new Vector2(50, 50), new Vector2(200, 200), 2000
     .Yoyo()
     .Loop();
 
-// ...
-
+// In Update:
 TweenHelper.UpdateSetup(gameTime);
 
-// ...
-
-shapeBatch.DrawCircle(position.Value, 10f, Color.White, Color.Black, 2f);
+// In Draw:
+_spriteBatch.Draw(_texture, position.Value, Color.White);
 ```
+
+Read the [Getting started](https://apostolique.github.io/Apos.Tweens/getting-started/) guide for the full walkthrough.
 
 ## Other projects you might like
 

@@ -29,7 +29,7 @@ namespace Apos.Tweens {
     public static class WaitExtensions {
         /// <summary>Plays <paramref name="tween"/>, then holds its end value for <paramref name="duration"/> milliseconds.</summary>
         public static ITween<T> Wait<T>(this ITween<T> tween, double duration) {
-            return tween.Then(new WaitTween<T>(tween.B, duration));
+            return tween.Then(NextTween<T>.Wait(tween, duration));
         }
     }
 }

@@ -9,11 +9,11 @@ namespace Apos.Tweens {
     public static class FloatTweenExtensions {
         /// <summary>Plays <paramref name="tween"/>, then goes from its end value to <paramref name="target"/>.</summary>
         public static ITween<float> To(this ITween<float> tween, float target, double duration, Interpolator easing) {
-            return tween.Then(new FloatTween(tween.B, target, duration, easing));
+            return tween.Then(NextTween<float>.To(tween, target, duration, easing, MathHelper.Lerp));
         }
         /// <summary>Plays <paramref name="tween"/>, then moves its end value by <paramref name="offset"/>.</summary>
         public static ITween<float> Offset(this ITween<float> tween, float offset, double duration, Interpolator easing) {
-            return tween.Then(new FloatTween(tween.B, tween.B + offset, duration, easing));
+            return tween.Then(NextTween<float>.Offset(tween, b => b + offset, duration, easing, MathHelper.Lerp));
         }
     }
 }

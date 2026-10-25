@@ -117,7 +117,7 @@ _blink = _fade.Wait(500).To(0f, 300, Easing.QuadIn);
 _fade.B = 0.5f;
 ```
 
-`To`, `Wait` and `Offset` read the end value of the previous tween when you call them. In the example above, `_blink` now fades in to 0.5, then jumps to 1 for the wait and fades out from 1.
+`To`, `Wait` and `Offset` start wherever the tween before them ends, even after a change. In the example above, `_blink` now fades in to 0.5, waits on 0.5 and fades out from 0.5. An `Offset` moves along with it too, since it's relative to where it starts.
 
 When the target moves while a tween is playing, it's usually easier to create a new tween that starts from the current value:
 

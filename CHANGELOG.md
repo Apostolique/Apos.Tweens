@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `ITween<T>` has a `Clock` and a setter on `StartTime`
 - `FloatTween`, `Vector2Tween` and `ColorTween` extend `Tween<T>`
 - `Loop()` lasts forever
+- `To`, `Offset` and `Wait` follow changes to the tween before them
 - Long chains are faster to read
 - `TweenHelper.UpdateSetup(GameTime)` moves the clock by the game time since the last call
 - `Offset` on a `ColorTween` takes a `Vector4` that can be negative

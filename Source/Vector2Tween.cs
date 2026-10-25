@@ -9,11 +9,11 @@ namespace Apos.Tweens {
     public static class Vector2TweenExtensions {
         /// <summary>Plays <paramref name="tween"/>, then goes from its end value to <paramref name="target"/>.</summary>
         public static ITween<Vector2> To(this ITween<Vector2> tween, Vector2 target, double duration, Interpolator easing) {
-            return tween.Then(new Vector2Tween(tween.B, target, duration, easing));
+            return tween.Then(NextTween<Vector2>.To(tween, target, duration, easing, Vector2.Lerp));
         }
         /// <summary>Plays <paramref name="tween"/>, then moves its end value by <paramref name="offset"/>.</summary>
         public static ITween<Vector2> Offset(this ITween<Vector2> tween, Vector2 offset, double duration, Interpolator easing) {
-            return tween.Then(new Vector2Tween(tween.B, tween.B + offset, duration, easing));
+            return tween.Then(NextTween<Vector2>.Offset(tween, b => b + offset, duration, easing, Vector2.Lerp));
         }
     }
 }

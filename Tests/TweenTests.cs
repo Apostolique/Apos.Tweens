@@ -74,6 +74,29 @@ namespace Apos.Tweens.Tests {
         }
 
         [Fact]
+        public void AChainFollowsChangesToTheTweensInIt() {
+            var first = Line();
+            var tween = first.Wait(500).To(0f, 1000, Easing.Linear);
+
+            first.B = 50f;
+
+            Assert.Equal(50f, tween.ValueAt(1000));
+            Assert.Equal(50f, tween.ValueAt(1250));
+            Assert.Equal(25f, tween.ValueAt(2000));
+        }
+
+        [Fact]
+        public void OffsetFollowsTheEndOfThePreviousTween() {
+            var first = Line();
+            var tween = first.Offset(-50f, 1000, Easing.Linear);
+
+            first.B = 200f;
+
+            Assert.Equal(150f, tween.B);
+            Assert.Equal(175f, tween.ValueAt(1500));
+        }
+
+        [Fact]
         public void LongChainsPlayEachStepInOrder() {
             ITween<float> tween = Line(0f, 1f, 100);
             for (int i = 2; i <= 50; i++) {

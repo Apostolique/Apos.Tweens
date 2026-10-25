@@ -56,7 +56,7 @@ namespace Apos.Tweens {
     public static class TweenExtensions {
         /// <summary>Plays <paramref name="tween"/>, then goes from its end value to <paramref name="target"/>.</summary>
         public static ITween<T> To<T>(this ITween<T> tween, T target, double duration, Interpolator easing, Lerp<T> lerp) {
-            return tween.Then(new Tween<T>(tween.B, target, duration, easing, lerp));
+            return tween.Then(NextTween<T>.To(tween, target, duration, easing, lerp));
         }
 
         /// <summary>Starts <paramref name="tween"/> over from the current time on its clock.</summary>

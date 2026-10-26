@@ -119,7 +119,7 @@ var height = new FloatTween(0f, 1f, 1000, Easing.SineInOut).Yoyo().Speed(2);
 
 ![A curve that rises and falls in half the time of a gray curve behind it](speed.png)
 
-The tween above lasts 1000 milliseconds instead of 2000. The gray curve is the tween before `Speed`.
+The gray curve is the same yoyo without `Speed`. The yoyo plays the 1000 millisecond tween forward and back, so it lasts 2000 milliseconds. Twice as fast, the white one lasts 1000.
 
 ## Delay
 
@@ -159,7 +159,7 @@ var slowReverse = tween.Remap(2000, ms => 1000 - ms / 2);
 
 ![A curve that falls from 1 to 0 over the whole time, over a gray curve that rises in half the time](remap.png)
 
-The gray curve is the tween before `Remap`.
+The gray curve is the same tween without `Remap`.
 
 `Speed`, `Delay`, `Slice`, `Reverse` and `Yoyo` could all be written with `Remap`.
 

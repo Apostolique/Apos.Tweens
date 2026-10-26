@@ -6,13 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-25
+
 ### Added
 
 - `Tween<T>` to tween any type with a lerp function
 - `TweenPlayer<T>` and `Play` to play a tween on a clock, with `Restart`, `Elapsed` and `IsDone`
 - `TweenClock`, a clock that can be paused and slowed down with `Scale`
 - `TweenHelper.Clock`, the clock players use by default
-- `TweenMath<T>` to set the lerp and add of a type once
+- `TweenMath<T>` to set the lerp, add, subtract and scale of a type once
 - Lerps for `Vector3`, `Vector4` and `Quaternion` that tweens use without being given one
 - `Offset` for any type with an add
 - `Loop(count)` to play a tween a set number of times, fractions included
@@ -24,7 +26,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `VelocityAt` on tweens and `Velocity` on players
 - `Retarget` on players to change the target without losing the velocity, with or without an easing
 - `EasedValue<T>` to ease toward a target that can change at any time, with `Snap`, `Smooth` and `Velocity`
-- `Subtract` and `Scale` in `TweenMath<T>`
 
 ### Changed
 
@@ -105,7 +106,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `Then`, `To`, `Offset`, `Wait`, `Loop`, `Reverse` and `Yoyo`
 - Easing functions: Linear, Sine, Quad, Cube, Quart, Quint, Circ, Expo, Back, Elastic, Bounce
 
-[Unreleased]: https://github.com/Apostolique/Apos.Tweens/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/Apostolique/Apos.Tweens/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/Apostolique/Apos.Tweens/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Apostolique/Apos.Tweens/compare/v0.1.4...v0.2.0
 [0.1.4]: https://github.com/Apostolique/Apos.Tweens/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/Apostolique/Apos.Tweens/compare/v0.1.2...v0.1.3

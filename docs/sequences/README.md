@@ -181,13 +181,7 @@ To change what a player plays, give it a new tween. It keeps its start time:
 _height.Tween = rise.To(0.5f, 300, Easing.QuadIn);
 ```
 
-When the target moves while a tween is playing, you can play a new tween that starts from the current value:
-
-```csharp
-_position = new Vector2Tween(_position.Value, newTarget, 300, Easing.CubeOut).Play();
-```
-
-The value doesn't jump, but its speed and direction do. `Retarget` keeps them instead. [Curves](../curves/README.md) shows how to use it.
+For a value that eases toward a target that keeps changing, like a scroll offset, an `EasedValue` is easier. [Moving targets](../targets/README.md) shows how to use it.
 
 ## Follow up
 

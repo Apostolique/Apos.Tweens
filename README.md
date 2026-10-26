@@ -19,6 +19,7 @@ This library is inspired by [MonoTween](https://github.com/njlr/MonoTween).
 * [Time](https://apostolique.github.io/Apos.Tweens/time/)
 * [Custom types](https://apostolique.github.io/Apos.Tweens/custom-types/)
 * [Curves](https://apostolique.github.io/Apos.Tweens/curves/)
+* [Moving targets](https://apostolique.github.io/Apos.Tweens/targets/)
 
 ## Features
 
@@ -27,7 +28,8 @@ This library is inspired by [MonoTween](https://github.com/njlr/MonoTween).
 * Bezier curves and splines that go through a list of points
 * `Speed`, `Delay`, `Slice` and `Remap` to change how a tween plays over time
 * `Map` and `Zip` to drive many values from one tween
-* Velocities, and `Retarget` to change where a tween goes without the motion kinking
+* `EasedValue` to ease toward a target that keeps changing, like a scroll offset, without allocating
+* Velocities, and smooth retargeting that keeps the speed the value had
 * [Easing functions](https://easings.net/): Linear, Sine, Quad, Cube, Quart, Quint, Expo, Circ, Back, Elastic, Bounce
 * Clocks that can be paused and slowed down on their own, for a game world that freezes while its menus keep moving
 * `ValueAt` to get the value at any point in time

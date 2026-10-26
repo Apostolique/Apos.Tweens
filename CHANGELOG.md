@@ -22,7 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `Speed`, `Delay`, `Slice` and `Remap` to change how a tween plays over time
 - `Map` and `Zip` to turn values into other values or put two tweens together
 - `VelocityAt` on tweens and `Velocity` on players
-- `Retarget` on players to change the target without losing the velocity
+- `Retarget` on players to change the target without losing the velocity, with or without an easing
+- `EasedValue<T>` to ease toward a target that can change at any time, with `Snap`, `Smooth` and `Velocity`
 - `Subtract` and `Scale` in `TweenMath<T>`
 
 ### Changed

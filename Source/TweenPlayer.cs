@@ -48,6 +48,18 @@ namespace Apos.Tweens {
             Tween = new HermiteTween<T>(value, velocity, target, TweenMath<T>.Scale(target, 0f), duration);
             Restart();
         }
+        /// <summary>
+        /// Plays a new tween from now that eases from <see cref="Value"/> to <paramref name="target"/> in
+        /// <paramref name="duration"/> milliseconds. The current <see cref="Velocity"/> carries over and fades
+        /// out. With an easing that starts at rest, like <see cref="Easing.SineInOut"/>, the speed doesn't jump at all.
+        /// </summary>
+        public void Retarget(T target, double duration, EasingFunction easing, Lerp<T> lerp = null) {
+            if (easing == null) throw new System.ArgumentNullException(nameof(easing));
+            T value = Value;
+            T velocity = Velocity;
+            Tween = new RetargetTween<T>(value, target, velocity, duration, easing, lerp ?? TweenMath<T>.Lerp ?? throw TweenMath<T>.NoLerp());
+            Restart();
+        }
     }
 
     public static class TweenPlayerExtensions {
